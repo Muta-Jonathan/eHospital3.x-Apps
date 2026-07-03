@@ -11,7 +11,7 @@ dotenv.config();
  */
 
 async function globalSetup() {
-  const requestContext = await request.newContext();
+  const requestContext = await request.newContext({ ignoreHTTPSErrors: true });
   const token = Buffer.from(
     `${process.env.E2E_USER_ADMIN_USERNAME}:${process.env.E2E_USER_ADMIN_PASSWORD}`
   ).toString("base64");

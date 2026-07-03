@@ -20,6 +20,7 @@ const config: PlaywrightTestConfig = {
     baseURL: `${process.env.E2E_BASE_URL}/spa/`,
     storageState: "e2e/storageState.json",
     video: "retain-on-failure",
+    ignoreHTTPSErrors: true,
   },
   projects: [
     {

@@ -1,8 +1,4 @@
-import {
-  APIRequestContext,
-  PlaywrightWorkerArgs,
-  WorkerFixture,
-} from "@playwright/test";
+import { type APIRequestContext, type PlaywrightWorkerArgs, type WorkerFixture } from '@playwright/test';
 
 /**
  * A fixture which initializes an [`APIRequestContext`](https://playwright.dev/docs/api/class-apirequestcontext)
@@ -17,10 +13,7 @@ import {
  * });
  * ```
  */
-export const api: WorkerFixture<
-  APIRequestContext,
-  PlaywrightWorkerArgs
-> = async ({ playwright }, use) => {
+export const api: WorkerFixture<APIRequestContext, PlaywrightWorkerArgs> = async ({ playwright }, use) => {
   const ctx = await playwright.request.newContext({
     baseURL: `${process.env.E2E_BASE_URL}/ws/rest/v1/`,
     httpCredentials: {
@@ -29,5 +22,5 @@ export const api: WorkerFixture<
     },
   });
 
-  await use(ctx);
+  use(ctx);
 };

@@ -1,5 +1,7 @@
-import { APIRequestContext, Page, test as base } from "@playwright/test";
-import { api } from "../fixtures";
+import { type APIRequestContext, type Page, test as base } from '@playwright/test';
+import { api } from '../fixtures';
+import { type Patient } from '../commands/types';
+import { generateRandomPatient, deletePatient } from '../commands';
 
 // This file sets up our custom test harness using the custom fixtures.
 // See https://playwright.dev/docs/test-fixtures#creating-a-fixture for details.
@@ -9,6 +11,7 @@ import { api } from "../fixtures";
 
 export interface CustomTestFixtures {
   loginAsAdmin: Page;
+  patient: Patient;
 }
 
 export interface CustomWorkerFixtures {
@@ -16,5 +19,14 @@ export interface CustomWorkerFixtures {
 }
 
 export const test = base.extend<CustomTestFixtures, CustomWorkerFixtures>({
-  api: [api, { scope: "worker" }],
+  api: [api, { scope: 'worker' }],
+  patient: [
+    async ({ api }, use) => {
+      const patient = await generateRandomPatient(api);
+      await use(patient);
+      // Clean up patient after tests. (Note: if tests create bills, they should delete them in afterEach)
+      await deletePatient(api, patient.uuid);
+    },
+    { scope: 'test', auto: true },
+  ],
 });
